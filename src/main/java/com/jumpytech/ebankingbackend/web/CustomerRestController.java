@@ -1,7 +1,6 @@
 package com.jumpytech.ebankingbackend.web;
 
 import com.jumpytech.ebankingbackend.dtos.CustomerDTO;
-import com.jumpytech.ebankingbackend.entities.Customer;
 import com.jumpytech.ebankingbackend.exceptions.CustomerNotFoundException;
 import com.jumpytech.ebankingbackend.services.BankAccountService;
 import lombok.AllArgsConstructor;
@@ -31,7 +30,7 @@ public class CustomerRestController {
         return bankAccountService.saveCustomer(customerDTO);
     }
     @PutMapping("/customers/{customerId}")
-    public CustomerDTO updateCustomer(@PathVariable Long customerId,CustomerDTO customerDTO){
+    public CustomerDTO updateCustomer(@PathVariable Long customerId,@RequestBody CustomerDTO customerDTO){
         customerDTO.setId(customerId);
         return bankAccountService.updateCustomer(customerDTO);
     }
