@@ -1,9 +1,12 @@
 package com.jumpytech.ebankingbackend;
 
+import com.jumpytech.ebankingbackend.dtos.BankAccountDTO;
+import com.jumpytech.ebankingbackend.dtos.CurrentBankAccountDTO;
 import com.jumpytech.ebankingbackend.dtos.CustomerDTO;
+import com.jumpytech.ebankingbackend.dtos.SavingBankAccountDTO;
 import com.jumpytech.ebankingbackend.entities.*;
 import com.jumpytech.ebankingbackend.enums.AccountStatus;
-import com.jumpytech.ebankingbackend.enums.OpertationType;
+import com.jumpytech.ebankingbackend.enums.OperationType;
 import com.jumpytech.ebankingbackend.exceptions.BalanceNotSufficientException;
 import com.jumpytech.ebankingbackend.exceptions.BankAccountNotFoundException;
 import com.jumpytech.ebankingbackend.exceptions.CustomerNotFoundException;
@@ -41,20 +44,27 @@ public class EbankingBackendApplication {
               try {
                   bankAccountService.saveCurrentBankAccount(Math.random()*90000,9000,cust.getId());
                   bankAccountService.saveSavingBankAccount(Math.random()*120000,2.8, cust.getId());
-                  List<BankAccount> bankAccounts=bankAccountService.bankAccountList();
-                  for(BankAccount bankAccount:bankAccounts){
-                      for(int i=0;i<10;i++){
-                          bankAccountService.credit(bankAccount.getId(),10000+Math.random()*120000,"Credit ");
-                          bankAccountService.debit(bankAccount.getId(),1000+Math.random()*9000,"Debit");
-                      }
-                  }
+
+
 
               } catch (CustomerNotFoundException e) {
                   e.printStackTrace();
-              } catch (BankAccountNotFoundException | BalanceNotSufficientException e) {
-                  throw new RuntimeException(e);
               }
           });
+            List<BankAccountDTO> bankAccounts=bankAccountService.bankAccountList();
+            for(BankAccountDTO bankAccount:bankAccounts){
+                for (int i = 0; i < 10; i++) {
+                    String accountId;
+                    if (bankAccount instanceof SavingBankAccountDTO) {
+                        accountId = ((SavingBankAccountDTO) bankAccount).getId();
+                    } else {
+                        accountId = ((CurrentBankAccountDTO) bankAccount).getId();
+                    }
+
+                    bankAccountService.credit(accountId, 10000 + Math.random() * 120000, "Credit ");
+                    bankAccountService.debit(accountId, 1000 + Math.random() * 9000, "Debit");
+                }
+            }
         };
 
     }
@@ -94,7 +104,7 @@ public class EbankingBackendApplication {
                    AccountOperation accountOperation= new AccountOperation();
                    accountOperation.setOperationDate(new Date());
                    accountOperation.setAmount(Math.random()*12000);
-                   accountOperation.setType(Math.random()>0.5? OpertationType.DEBIT:OpertationType.CREDIT);
+                   accountOperation.setType(Math.random()>0.5? OperationType.DEBIT: OperationType.CREDIT);
                    accountOperation.setBankAccount(acc);
                    accountOperationRepository.save(accountOperation);
                }

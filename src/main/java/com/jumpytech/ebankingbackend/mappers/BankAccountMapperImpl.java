@@ -1,9 +1,11 @@
 package com.jumpytech.ebankingbackend.mappers;
 
 
+import com.jumpytech.ebankingbackend.dtos.AccountOperationDTO;
 import com.jumpytech.ebankingbackend.dtos.CurrentBankAccountDTO;
 import com.jumpytech.ebankingbackend.dtos.CustomerDTO;
 import com.jumpytech.ebankingbackend.dtos.SavingBankAccountDTO;
+import com.jumpytech.ebankingbackend.entities.AccountOperation;
 import com.jumpytech.ebankingbackend.entities.CurrentAccount;
 import com.jumpytech.ebankingbackend.entities.Customer;
 import com.jumpytech.ebankingbackend.entities.SavingAccount;
@@ -48,5 +50,10 @@ public class BankAccountMapperImpl {
         BeanUtils.copyProperties(dto,currentAccount);
         currentAccount.setCustomer(fromCustomer(dto.getCustomer()));
         return currentAccount;
+    }
+    public AccountOperationDTO fromAccountOperation(AccountOperation accountOperation){
+        AccountOperationDTO dto=new AccountOperationDTO();
+        BeanUtils.copyProperties(accountOperation,dto);
+         return dto;
     }
 }

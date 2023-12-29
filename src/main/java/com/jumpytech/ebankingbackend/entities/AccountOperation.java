@@ -1,6 +1,6 @@
 package com.jumpytech.ebankingbackend.entities;
 
-import com.jumpytech.ebankingbackend.enums.OpertationType;
+import com.jumpytech.ebankingbackend.enums.OperationType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,7 +15,7 @@ public class AccountOperation {
     private Date operationDate;
     private double amount;
     @Enumerated(EnumType.STRING)
-    private OpertationType type;
+    private OperationType type;
     @ManyToOne
     private BankAccount bankAccount;
     private String descriptiion;

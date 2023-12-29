@@ -1,5 +1,5 @@
 package com.jumpytech.ebankingbackend.enums;
 
-public enum OpertationType {
+public enum OperationType {
     CREDIT,DEBIT
 }
