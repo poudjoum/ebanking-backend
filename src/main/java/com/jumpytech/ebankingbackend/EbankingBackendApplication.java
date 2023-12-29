@@ -7,8 +7,6 @@ import com.jumpytech.ebankingbackend.dtos.SavingBankAccountDTO;
 import com.jumpytech.ebankingbackend.entities.*;
 import com.jumpytech.ebankingbackend.enums.AccountStatus;
 import com.jumpytech.ebankingbackend.enums.OperationType;
-import com.jumpytech.ebankingbackend.exceptions.BalanceNotSufficientException;
-import com.jumpytech.ebankingbackend.exceptions.BankAccountNotFoundException;
 import com.jumpytech.ebankingbackend.exceptions.CustomerNotFoundException;
 import com.jumpytech.ebankingbackend.repositories.AccountOperationRepository;
 import com.jumpytech.ebankingbackend.repositories.BankAccountRepository;

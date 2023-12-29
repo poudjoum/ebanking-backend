@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 
 public class BankAccountRestController {
-    private BankAccountService bankAccountService;
+    private final BankAccountService bankAccountService;
 
     public BankAccountRestController (BankAccountService bankAccountService){
         this.bankAccountService=bankAccountService;

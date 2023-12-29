@@ -99,8 +99,7 @@ public class BankAccountServiceImpl implements BankAccountService {
 
         BankAccount bankAccount=bankAccountRepository.findById(accountId)
                 .orElseThrow(()->new BankAccountNotFoundException("Bank account not FOUND"));
-        if(bankAccount instanceof SavingAccount){
-            SavingAccount savingAccount=(SavingAccount) bankAccount;
+        if(bankAccount instanceof SavingAccount savingAccount){
             return dtoMapper.fromSavingBankAccount(savingAccount);
         }else{
             CurrentAccount currentAccount=(CurrentAccount) bankAccount;
@@ -153,9 +152,8 @@ public class BankAccountServiceImpl implements BankAccountService {
     @Override
     public List<BankAccountDTO> bankAccountList() {
         List<BankAccount>bankAccounts=bankAccountRepository.findAll();
-        List<BankAccountDTO> bankAccountDTOS=bankAccounts.stream().map(bankAccount -> {
-            if(bankAccount instanceof SavingAccount){
-                SavingAccount savingAccount=(SavingAccount) bankAccount;
+        return bankAccounts.stream().map(bankAccount -> {
+            if(bankAccount instanceof SavingAccount savingAccount){
                 return dtoMapper.fromSavingBankAccount(savingAccount);
             }else{
                 CurrentAccount currentAccount=(CurrentAccount) bankAccount;
@@ -163,7 +161,6 @@ public class BankAccountServiceImpl implements BankAccountService {
 
             }
         }).collect(Collectors.toList());
-        return bankAccountDTOS;
     }
     @Override
     public CustomerDTO getCustomer(Long customerId) throws CustomerNotFoundException {

@@ -1,7 +1,6 @@
 package com.jumpytech.ebankingbackend.dtos;
 
 import com.jumpytech.ebankingbackend.enums.AccountStatus;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.Date;
