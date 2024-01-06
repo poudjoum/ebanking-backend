@@ -1,18 +1,15 @@
 package com.jumpytech.ebankingbackend.web;
 
-import com.jumpytech.ebankingbackend.dtos.AccountHistoryDTO;
-import com.jumpytech.ebankingbackend.dtos.AccountOperationDTO;
-import com.jumpytech.ebankingbackend.dtos.BankAccountDTO;
+import com.jumpytech.ebankingbackend.dtos.*;
+import com.jumpytech.ebankingbackend.exceptions.BalanceNotSufficientException;
 import com.jumpytech.ebankingbackend.exceptions.BankAccountNotFoundException;
 import com.jumpytech.ebankingbackend.services.BankAccountService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@CrossOrigin("*")
 
 public class BankAccountRestController {
     private final BankAccountService bankAccountService;
@@ -39,5 +36,20 @@ public class BankAccountRestController {
                                               @RequestParam(name = "size",defaultValue = "5") int size) throws BankAccountNotFoundException {
         return bankAccountService.getAccountHistory(accountId,page,size);
     }
+    @PostMapping("/accounts/debit")
+    public DebitDTO debit(@RequestBody DebitDTO dto) throws BankAccountNotFoundException, BalanceNotSufficientException {
+        this.bankAccountService.debit(dto.getAccountId(),dto.getAmount(),dto.getDescription());
+        return dto;
 
+    }
+    @PostMapping("/accounts/credit")
+    public CreditDTO credit(@RequestBody CreditDTO dto) throws BankAccountNotFoundException {
+        this.bankAccountService.credit(dto.getAccountId(),dto.getAmount(),dto.getDescription());
+        return dto;
+    }
+    @PostMapping("/accounts/transfert")
+    public void transfert(@RequestBody TransfertRequestDTO dto) throws BankAccountNotFoundException, BalanceNotSufficientException {
+        this.bankAccountService.transfert(dto.getAccountSource(),dto.getAccountDestination(),dto.getAmount());
+
+    }
 }
