@@ -142,8 +142,14 @@ public class BankAccountServiceImpl implements BankAccountService {
 
     @Override
     public void transfert(String accountIdSource, String accountIdDestination, double amount) throws BankAccountNotFoundException, BalanceNotSufficientException {
+        debit(accountIdSource,amount,"Transfert to "+accountIdDestination);
+        credit(accountIdDestination,amount,"Transfert from:"+accountIdSource);
+    }
 
-        debit(accountIdDestination,amount,"Transfert to"+accountIdDestination);
+    @Override
+    public void transfert(String accountIdSource, String accountIdDestination, double amount, String description) throws BankAccountNotFoundException, BalanceNotSufficientException {
+
+        debit(accountIdSource,amount,"Transfert to "+accountIdDestination);
         credit(accountIdDestination,amount,"Transfert from:"+accountIdSource);
 
 
@@ -192,7 +198,7 @@ public class BankAccountServiceImpl implements BankAccountService {
     public AccountHistoryDTO getAccountHistory(String accountId, int page, int size) throws BankAccountNotFoundException {
         BankAccount bankAccount=bankAccountRepository.findById(accountId).orElse(null);
         if(bankAccount==null)throw new BankAccountNotFoundException("Account Not Found...");
-        Page<AccountOperation> accountOperationPage=accountOperationRepository.findByBankAccountId(accountId, PageRequest.of(page,size));
+        Page<AccountOperation> accountOperationPage=accountOperationRepository.findByBankAccountIdOrderByOperationDateAsc(accountId, PageRequest.of(page,size));
         AccountHistoryDTO accountHistoryDTO=new AccountHistoryDTO();
         List<AccountOperationDTO>accountOperationDTOS= accountOperationPage.getContent().stream().map(op->
                 dtoMapper.fromAccountOperation(op)).collect(Collectors.toList());
@@ -212,5 +218,19 @@ public class BankAccountServiceImpl implements BankAccountService {
 
         return customers.stream().map(
                 cust->dtoMapper.fromCustomer(cust)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BankAccountDTO> accountsByCustomerId(Long customer_id) {
+        List<BankAccount> accounts = bankAccountRepository.findBankAccountByCustomer_Id(customer_id);
+        return accounts.stream().map(bankAccount -> {
+            if (bankAccount instanceof SavingAccount savingAccount) {
+                return dtoMapper.fromSavingBankAccount(savingAccount);
+            } else {
+                CurrentAccount currentAccount = (CurrentAccount) bankAccount;
+                return dtoMapper.fromCurrentBankAccount(currentAccount);
+
+            }
+        }).collect(Collectors.toList());
     }
 }

@@ -52,4 +52,8 @@ public class BankAccountRestController {
         this.bankAccountService.transfert(dto.getAccountSource(),dto.getAccountDestination(),dto.getAmount());
 
     }
+    @GetMapping("/customer-accounts/{customerId}")
+    public List<BankAccountDTO>AccountsByCustomer(@PathVariable Long customerId){
+        return this.bankAccountService.accountsByCustomerId(customerId);
+    }
 }

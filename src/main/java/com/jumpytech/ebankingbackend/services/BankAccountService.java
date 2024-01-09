@@ -23,6 +23,8 @@ public interface BankAccountService {
     void credit(String accountId, double amount, String description) throws BankAccountNotFoundException;
     void transfert(String accountIdSource,String accountIdDestination, double amount) throws BankAccountNotFoundException, BalanceNotSufficientException;
 
+    void transfert(String accountIdSource, String accountIdDestination, double amount, String description) throws BankAccountNotFoundException, BalanceNotSufficientException;
+
     List<BankAccountDTO>bankAccountList();
 
     CustomerDTO getCustomer(Long customerId) throws CustomerNotFoundException;
@@ -37,4 +39,5 @@ public interface BankAccountService {
  AccountHistoryDTO getAccountHistory(String accountId, int page, int size) throws BankAccountNotFoundException;
 
     List<CustomerDTO> searchCustomers(String keyword);
+    List<BankAccountDTO>accountsByCustomerId(Long customer_id);
 }
